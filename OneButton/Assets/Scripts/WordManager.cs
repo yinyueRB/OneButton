@@ -6,6 +6,10 @@ public class WordManager : MonoBehaviour
 {
     [Header("UI 引用")][Tooltip("请按顺序拖入 4 个格子的 Text 组件")]
     public TextMeshProUGUI[] slotTexts; // 存放4个格子的数组
+    
+    [Header("逻辑引用")]
+    public PlayerController player;
+    public LetterCarousel carousel;
 
     private string currentWord = "";    // 当前玩家打出的字母组合
     private bool isProcessing = false;  // 是否正在处理判定（判定时不允许玩家继续打字）
@@ -14,6 +18,34 @@ public class WordManager : MonoBehaviour
     void Start()
     {
         UpdateUI();
+    }
+    
+    void Update()
+    {
+        // 只有在允许输入的时候（没有在判定、没有在移动），才能按快捷键
+        if (CanInput()) 
+        {
+            // 按下键盘上的数字键 1~4，瞬间填满单词并执行！
+            if (Input.GetKeyDown(KeyCode.Alpha1)) ForceWord("MOVE");
+            if (Input.GetKeyDown(KeyCode.Alpha2)) ForceWord("TURN");
+            if (Input.GetKeyDown(KeyCode.Alpha3)) ForceWord("DASH");
+            if (Input.GetKeyDown(KeyCode.Alpha4)) ForceWord("JUMP");
+        }
+    }
+
+    // 强行写入单词并直接走判定流程
+    private void ForceWord(string debugWord)
+    {
+        currentWord = debugWord; // 直接把当前字母组合替换成完整单词
+        
+        // 瞬间刷新 4 个格子的 UI 显示
+        for (int i = 0; i < slotTexts.Length; i++)
+        {
+            slotTexts[i].text = currentWord[i].ToString();
+        }
+
+        // 直接呼叫原来的单词判定逻辑！
+        CheckWord(); 
     }
 
     // 提供给外部的方法：判断当前是否允许玩家继续输入字母
@@ -53,32 +85,32 @@ public class WordManager : MonoBehaviour
     // 判定单词对错
     private void CheckWord()
     {
-        isProcessing = true; // 锁定输入
-        string word = currentWord.ToUpper(); // 全部转为大写方便比对
+        isProcessing = true;
+        string word = currentWord.ToUpper();
 
         if (word == "MOVE")
         {
             Debug.Log("<color=cyan>成功打出指令: MOVE! 执行向前移动</color>");
-            // TODO: 在这里调用玩家向前移动的代码
-            
-            ClearWord(1f); // 1秒后清空，准备下一次输入
+            player.MoveForward(); // 呼叫移动
+            ClearWord(1f); // 1秒后清空填字格
         }
         else if (word == "TURN")
         {
-            Debug.Log("<color=cyan>成功打出指令: TURN! 准备转向</color>");
-            // TODO: 通知轮播表切换为左右图标
-            
-            ClearWord(1f);
+            Debug.Log("<color=cyan>成功打出指令: TURN! 切换轮播表</color>");
+            carousel.SwitchToTurnMode(); // 呼叫轮播表切换模式
+            ClearWord(0f); // 立刻清空填字格，以便玩家专心选方向
         }
         else if (word == "DASH")
         {
             Debug.Log("<color=cyan>成功打出指令: DASH! 执行冲刺</color>");
-            ClearWord(1f);
+            player.Dash(); // 呼叫玩家执行冲刺
+            ClearWord(1f); // 1秒后清空填字格
         }
         else if (word == "JUMP")
         {
             Debug.Log("<color=cyan>成功打出指令: JUMP! 执行跳跃</color>");
-            ClearWord(1f);
+            player.Jump(); // 呼叫跳跃动作
+            ClearWord(1f); // 1秒后清空
         }
         else
         {

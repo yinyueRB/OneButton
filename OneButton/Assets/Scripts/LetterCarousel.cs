@@ -1,95 +1,116 @@
 using UnityEngine;
-using TMPro; // 引入 TextMeshPro 命名空间
+using TMPro;
 
 public class LetterCarousel : MonoBehaviour
 {
-    [Header("引用")]
-    public WordManager wordManager; // 关联单词管理器
-    
     [Header("UI 引用")]
-    public TextMeshProUGUI letterText; // 挂载我们刚才创建的 Text 文本
+    public TextMeshProUGUI letterText;
+    public WordManager wordManager; // 关联单词管理器
+    public PlayerController player; // 关联刚刚写的玩家控制器
 
     [Header("轮播设置")]
-    public float scrollSpeed = 0.15f;  // 字母滚动的间隔时间（秒），越小滚得越快
-    private float timer = 0f;          // 计时器
+    public float scrollSpeed = 0.15f;
+    private float timer = 0f;
 
-    // 完整的字母表（为了后续方便改成图标，我们用字符串数组）
+    // 状态枚举：当前处于打字模式，还是在选转向模式？
+    public enum CarouselMode { Alphabet, TurnSelection }
+    public CarouselMode currentMode = CarouselMode.Alphabet;
+
+    // 两个不同的内容数组
     private string[] alphabet = { 
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", 
-        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" 
+        "M", "O", "V", "E", "T", "U", "R", "N", "J", "P", "D", "A", "S", 
+        "H"
     };
+    private string[] turnIcons = { "<", ">" }; // 用 < 和 > 代表左右转
     
-    private int currentIndex = 0;      // 当前轮播到的字母索引
-    private bool isScrolling = false;  // 是否正在长按滚动
+    private string[] currentArray;     // 当前正在滚动的是哪个数组
+    private int currentIndex = 0;
+    private bool isScrolling = false;
 
     void Start()
     {
-        // 游戏开始时显示第一个字母
+        ResetToAlphabet(); // 初始化为字母模式
+    }
+
+    // 提供给外部：切换到转向模式
+    public void SwitchToTurnMode()
+    {
+        currentMode = CarouselMode.TurnSelection;
+        currentArray = turnIcons;
+        currentIndex = 0;
+        UpdateUIText();
+    }
+
+    // 恢复到字母模式
+    public void ResetToAlphabet()
+    {
+        currentMode = CarouselMode.Alphabet;
+        currentArray = alphabet;
+        currentIndex = 0;
         UpdateUIText();
     }
 
     void Update()
     {
-        // 1. 检测按下 (空格键 或 鼠标左键) -> 开始滚动
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0) && wordManager.CanInput())
+        // 只有当管理器允许输入，且玩家没在移动时，才能操作
+        bool canInput = wordManager.CanInput() && !player.isActing;
+
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && canInput)
         {
             isScrolling = true;
-            timer = 0f; // 按下时重置计时器，确保立即有反馈
+            timer = 0f;
         }
 
-        // 2. 检测长按过程中 -> 按速度切换字母
         if (isScrolling)
         {
-            timer += Time.deltaTime; // 累加时间
-            
-            if (timer >= scrollSpeed) // 当时间超过我们设置的间隔
+            timer += Time.deltaTime;
+            if (timer >= scrollSpeed)
             {
-                timer = 0f; // 重置计时器
-                NextLetter(); // 切换到下一个字母
+                timer = 0f;
+                NextItem();
             }
         }
 
-        // 3. 检测松手 -> 停止滚动并锁定字母
         if (Input.GetKeyUp(KeyCode.Space) || Input.GetMouseButtonUp(0))
         {
-            isScrolling = false;
-            LockCurrentLetter(); // 锁定并输出当前字母
+            if (isScrolling) // 防止没按下就松手触发bug
+            {
+                isScrolling = false;
+                LockCurrentItem();
+            }
         }
     }
 
-    // 切换到下一个字母的方法
-    private void NextLetter()
+    private void NextItem()
     {
         currentIndex++;
-        
-        // 如果超出了 Z，就回到 A (循环)
-        if (currentIndex >= alphabet.Length)
-        {
-            currentIndex = 0;
-        }
-        
+        // 注意这里改成了 currentArray.Length，这样能自动适配两个数组的长度
+        if (currentIndex >= currentArray.Length) currentIndex = 0;
         UpdateUIText();
     }
 
-    // 更新 UI 显示的方法
     private void UpdateUIText()
     {
-        if (letterText != null)
-        {
-            letterText.text = alphabet[currentIndex];
-        }
+        if (letterText != null) letterText.text = currentArray[currentIndex];
     }
 
-    // 松手时锁定字母的方法
-    private void LockCurrentLetter()
+    private void LockCurrentItem()
     {
-        string selectedLetter = alphabet[currentIndex];
-    
-        if (wordManager != null)
+        string selectedItem = currentArray[currentIndex];
+        
+        // 如果是在拼写字母模式
+        if (currentMode == CarouselMode.Alphabet)
         {
-            wordManager.AddLetter(selectedLetter);
+            if (wordManager != null) wordManager.AddLetter(selectedItem);
         }
-    
+        // 如果是在选方向模式
+        else if (currentMode == CarouselMode.TurnSelection)
+        {
+            bool isLeft = (currentIndex == 0); // 索引0是"<"，代表左
+            player.Turn(isLeft); // 调用主角转身
+            ResetToAlphabet();   // 转身后马上恢复成字母表
+        }
+        
         currentIndex = 0; 
         UpdateUIText();
     }
