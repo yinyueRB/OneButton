@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class LetterCarousel : MonoBehaviour
@@ -51,7 +52,11 @@ public class LetterCarousel : MonoBehaviour
 
     void Update()
     {
-        bool canInput = wordManager.CanInput() && !player.isActing;
+        // 1. 判断鼠标当前是不是指在 UI 元素（按钮/面板）上
+        bool isClickingUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        
+        // 2. 只有当：允许输入 且 没在做动作 且 没暂停 且 没点在UI上 时，才允许操作轮播表！
+        bool canInput = wordManager.CanInput() && !player.isActing && !PauseManager.isPaused && !isClickingUI;
 
         // 1. 按下瞬间 -> 开启滚动状态，重置计时器（但不立刻切换字母！）
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && canInput)
