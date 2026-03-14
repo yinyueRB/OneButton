@@ -1876,7 +1876,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   developerPanel: {fileID: 1674662226}
-  gameSceneName: SampleScene
+  gameSceneName: Model
   uiAudioSource: {fileID: 1609897611}
   buttonClickClip: {fileID: 8300000, guid: aecd0afe50cbd6946a8ee8e06c73a404, type: 3}
   soundDelay: 0.15
@@ -1993,7 +1993,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1674662227
 RectTransform:
   m_ObjectHideFlags: 0

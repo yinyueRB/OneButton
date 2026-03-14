@@ -3,6 +3,13 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("音效设置")]
+    public AudioSource actionAudio; // 播放动作的喇叭（第一个喇叭）
+    public AudioClip moveClip;      // 前进音效
+    public AudioClip turnClip;      // 转向音效
+    public AudioClip dashClip;      // 冲刺音效
+    public AudioClip jumpClip;      // 跳跃音效
+    
     [Header("移动设置")]
     public float moveDistance = 2f;    // 每次 Move 移动的距离
     public float actionDuration = 0.3f;// 移动或转向花费的时间
@@ -46,6 +53,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 // 如果前方空空如也，才执行真正的平滑移动逻辑
+                if (actionAudio != null && moveClip != null) actionAudio.PlayOneShot(moveClip);
                 StartCoroutine(MoveRoutine(transform.position + transform.forward * moveDistance));
             }
         }
@@ -53,17 +61,32 @@ public class PlayerController : MonoBehaviour
 
     public void Dash()
     {
-        if (!isActing) StartCoroutine(DashRoutine());
+        if (!isActing) 
+        {
+            // 播放冲刺音效！
+            if (actionAudio != null && dashClip != null) actionAudio.PlayOneShot(dashClip);
+            StartCoroutine(DashRoutine());
+        }
     }
 
     public void Turn(bool isLeft)
     {
-        if (!isActing) StartCoroutine(TurnRoutine(isLeft));
+        if (!isActing) 
+        {
+            // 播放转向音效！
+            if (actionAudio != null && turnClip != null) actionAudio.PlayOneShot(turnClip);
+            StartCoroutine(TurnRoutine(isLeft));
+        }
     }
     
     public void Jump()
     {
-        if (!isActing) StartCoroutine(JumpRoutine());
+        if (!isActing) 
+        {
+            // 播放跳跃音效！
+            if (actionAudio != null && jumpClip != null) actionAudio.PlayOneShot(jumpClip);
+            StartCoroutine(JumpRoutine());
+        }
     }
     
     // --- 核心协程逻辑 ---
@@ -108,7 +131,7 @@ public class PlayerController : MonoBehaviour
             // 【核心修改点在这里】
             // hit.distance 是玩家中心点到墙壁表面的实际距离
             // 我们希望玩家中心停在离墙表面 1 米的地方，所以实际移动距离 = 总距离 - 1米
-            float travelDistance = hit.distance - 1f;
+            float travelDistance = hit.distance - 1.5f;
 
             // 做一个安全限制：如果玩家起步时离墙就已经不足1米了，就让他原地不动 (距离设为0)
             if (travelDistance < 0f) 

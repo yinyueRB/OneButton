@@ -3,7 +3,11 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 public class LetterCarousel : MonoBehaviour
-{[Header("UI 引用")]
+{
+    [Header("音效设置")]
+    public AudioSource scrollAudio; // 播放滚动长音效的喇叭（第二个喇叭）
+    
+    [Header("UI 引用")]
     public TextMeshProUGUI topText;     // 上一个字母
     public TextMeshProUGUI middleText;  // 当前字母 (选中项)
     public TextMeshProUGUI bottomText;  // 下一个字母
@@ -63,7 +67,7 @@ public class LetterCarousel : MonoBehaviour
         {
             isScrolling = true;
             timer = 0f; 
-            // 【修复点】：删掉了这里的 NextItem();
+            if (scrollAudio != null) scrollAudio.Play();
         }
 
         // 2. 长按过程中 -> 只要时间超过阈值，就滚动到下一个
@@ -83,6 +87,7 @@ public class LetterCarousel : MonoBehaviour
             if (isScrolling) 
             {
                 isScrolling = false;
+                if (scrollAudio != null) scrollAudio.Stop();
                 LockCurrentItem();
             }
         }
