@@ -1860,6 +1860,8 @@ MonoBehaviour:
   backWall: {fileID: 1806686390}
   winSceneName: WinScene
   leaveDistance: 4
+  triggerDelay: 0.5
+  fadeDuration: 1
 --- !u!4 &153402337
 Transform:
   m_ObjectHideFlags: 0
@@ -10469,7 +10471,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 03a3d0a8188c8fc48ae17d22a7ecc6bc,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -51.021282
+      value: -51.28
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 03a3d0a8188c8fc48ae17d22a7ecc6bc,
         type: 3}
@@ -57922,7 +57924,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9651be7a7cefa7e428d6369f159e88f9, type: 2}
+  - {fileID: 2100000, guid: fcb92fa0bf1c3d84cad04df352ba7788, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -60871,7 +60873,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0e0b3c1b43e37714ba70b6802282df4f,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -322.59
+      value: -322.74
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0e0b3c1b43e37714ba70b6802282df4f,
         type: 3}
@@ -69922,7 +69924,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9651be7a7cefa7e428d6369f159e88f9, type: 2}
+  - {fileID: 2100000, guid: fcb92fa0bf1c3d84cad04df352ba7788, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
