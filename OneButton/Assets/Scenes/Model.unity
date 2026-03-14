@@ -1858,7 +1858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frontWall: {fileID: 6039532653803896070}
   backWall: {fileID: 1806686390}
-  winSceneName: WinScene
+  winSceneName: End
   leaveDistance: 4
   triggerDelay: 0.5
   fadeDuration: 1
