@@ -40,8 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!isActing)
         {
-            // 在玩家肚子高度，向正前方发射一条射线，检测距离等于 moveDistance (也就是2米)
-            Vector3 rayStart = transform.position + Vector3.up * 0.5f;
+            // 在玩家肚子高度，向正前方发射一条射线，检测距离等于 moveDistance
+            Vector3 rayStart = transform.position + Vector3.up * 0.2f;
             
             // 发射射线：起点, 方向, 结果存入hit(这里不需要), 检测距离, 检测的图层
             if (Physics.Raycast(rayStart, transform.forward, moveDistance, obstacleLayer))
@@ -83,9 +83,23 @@ public class PlayerController : MonoBehaviour
     {
         if (!isActing) 
         {
-            // 播放跳跃音效！
-            if (actionAudio != null && jumpClip != null) actionAudio.PlayOneShot(jumpClip);
-            StartCoroutine(JumpRoutine());
+            Vector3 highRayStart = transform.position + Vector3.up * 0.5f; 
+            
+            // 发射射线，检测距离为 moveDistance (也就是 3 米)
+            if (Physics.Raycast(highRayStart, transform.forward, moveDistance, obstacleLayer))
+            {
+                // 如果在 0.5 米的高度还碰到了障碍物，说明这是一堵高墙！
+                Debug.Log("<color=red>前方墙壁太高，跳不过去！</color>");
+                
+                // 可选：在这里播放一个“撞墙”的提示音效，拒绝跳跃
+                // if (actionAudio != null) actionAudio.PlayOneShot(errorClip);
+            }
+            else
+            {
+                // 如果高空射线没撞到东西，说明前方要么没墙，要么只是个矮墙！可以起跳！
+                if (actionAudio != null && jumpClip != null) actionAudio.PlayOneShot(jumpClip);
+                StartCoroutine(JumpRoutine());
+            }
         }
     }
     
@@ -124,7 +138,7 @@ public class PlayerController : MonoBehaviour
         // 向正前方发射一条射线，最远检测 100 米，只检测 Obstacle 层的物体
         RaycastHit hit;
         // 射线起点稍微抬高0.5米，防止蹭到地板
-        Vector3 rayStart = transform.position + Vector3.up * 0.5f; 
+        Vector3 rayStart = transform.position + Vector3.up * 0.2f; 
 
         if (Physics.Raycast(rayStart, transform.forward, out hit, 100f, obstacleLayer))
         {
