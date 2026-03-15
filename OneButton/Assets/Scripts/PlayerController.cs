@@ -3,6 +3,13 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("音效设置")]
+    public AudioSource actionAudio; // 播放动作的喇叭（第一个喇叭）
+    public AudioClip moveClip;      // 前进音效
+    public AudioClip turnClip;      // 转向音效
+    public AudioClip dashClip;      // 冲刺音效
+    public AudioClip jumpClip;      // 跳跃音效
+    
     [Header("移动设置")]
     public float moveDistance = 2f;    // 每次 Move 移动的距离
     public float actionDuration = 0.3f;// 移动或转向花费的时间
@@ -33,8 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!isActing)
         {
-            // 在玩家肚子高度，向正前方发射一条射线，检测距离等于 moveDistance (也就是2米)
-            Vector3 rayStart = transform.position + Vector3.up * 0.5f;
+            // 在玩家肚子高度，向正前方发射一条射线，检测距离等于 moveDistance
+            Vector3 rayStart = transform.position + Vector3.up * 0.2f;
             
             // 发射射线：起点, 方向, 结果存入hit(这里不需要), 检测距离, 检测的图层
             if (Physics.Raycast(rayStart, transform.forward, moveDistance, obstacleLayer))
@@ -46,6 +53,7 @@ public class PlayerController : MonoBehaviour
             else
             {
                 // 如果前方空空如也，才执行真正的平滑移动逻辑
+                if (actionAudio != null && moveClip != null) actionAudio.PlayOneShot(moveClip);
                 StartCoroutine(MoveRoutine(transform.position + transform.forward * moveDistance));
             }
         }
@@ -53,17 +61,46 @@ public class PlayerController : MonoBehaviour
 
     public void Dash()
     {
-        if (!isActing) StartCoroutine(DashRoutine());
+        if (!isActing) 
+        {
+            // 播放冲刺音效！
+            if (actionAudio != null && dashClip != null) actionAudio.PlayOneShot(dashClip);
+            StartCoroutine(DashRoutine());
+        }
     }
 
     public void Turn(bool isLeft)
     {
-        if (!isActing) StartCoroutine(TurnRoutine(isLeft));
+        if (!isActing) 
+        {
+            // 播放转向音效！
+            if (actionAudio != null && turnClip != null) actionAudio.PlayOneShot(turnClip);
+            StartCoroutine(TurnRoutine(isLeft));
+        }
     }
     
     public void Jump()
     {
-        if (!isActing) StartCoroutine(JumpRoutine());
+        if (!isActing) 
+        {
+            Vector3 highRayStart = transform.position + Vector3.up * 0.5f; 
+            
+            // 发射射线，检测距离为 moveDistance (也就是 3 米)
+            if (Physics.Raycast(highRayStart, transform.forward, moveDistance, obstacleLayer))
+            {
+                // 如果在 0.5 米的高度还碰到了障碍物，说明这是一堵高墙！
+                Debug.Log("<color=red>前方墙壁太高，跳不过去！</color>");
+                
+                // 可选：在这里播放一个“撞墙”的提示音效，拒绝跳跃
+                // if (actionAudio != null) actionAudio.PlayOneShot(errorClip);
+            }
+            else
+            {
+                // 如果高空射线没撞到东西，说明前方要么没墙，要么只是个矮墙！可以起跳！
+                if (actionAudio != null && jumpClip != null) actionAudio.PlayOneShot(jumpClip);
+                StartCoroutine(JumpRoutine());
+            }
+        }
     }
     
     // --- 核心协程逻辑 ---
@@ -101,14 +138,14 @@ public class PlayerController : MonoBehaviour
         // 向正前方发射一条射线，最远检测 100 米，只检测 Obstacle 层的物体
         RaycastHit hit;
         // 射线起点稍微抬高0.5米，防止蹭到地板
-        Vector3 rayStart = transform.position + Vector3.up * 0.5f; 
+        Vector3 rayStart = transform.position + Vector3.up * 0.2f; 
 
         if (Physics.Raycast(rayStart, transform.forward, out hit, 100f, obstacleLayer))
         {
             // 【核心修改点在这里】
             // hit.distance 是玩家中心点到墙壁表面的实际距离
             // 我们希望玩家中心停在离墙表面 1 米的地方，所以实际移动距离 = 总距离 - 1米
-            float travelDistance = hit.distance - 1f;
+            float travelDistance = hit.distance - 1.5f;
 
             // 做一个安全限制：如果玩家起步时离墙就已经不足1米了，就让他原地不动 (距离设为0)
             if (travelDistance < 0f) 

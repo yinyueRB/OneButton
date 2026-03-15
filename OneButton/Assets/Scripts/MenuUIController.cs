@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class MenuUIController : MonoBehaviour
 {
-    [Header("UI×é¼þÒýÓÃ")]
+    [Header("UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public GameObject developerPanel;
     public string gameSceneName = "GameScene";
 
-    [Header("ÒôÐ§ÉèÖÃ")]
+    [Header("ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½")]
     public AudioSource uiAudioSource;
     public AudioClip buttonClickClip;
-    [Header("ÑÓ³ÙÉèÖÃ")]
-    public float soundDelay = 0.15f; // ÒôÐ§²¥·ÅÑÓ³Ù£¨×ã¹»°´Å¥ÒôÐ§²¥·ÅÍê£©
+    [Header("ï¿½Ó³ï¿½ï¿½ï¿½ï¿½ï¿½")]
+    public float soundDelay = 0.15f; // ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ù£ï¿½ï¿½ã¹»ï¿½ï¿½Å¥ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ê£©
 
     void Start()
     {
@@ -25,7 +25,7 @@ public class MenuUIController : MonoBehaviour
 
         if (uiAudioSource == null)
         {
-            Debug.LogWarning("Î´¸³ÖµUIÒôÆµÔ´£¬ÒôÐ§½«ÎÞ·¨²¥·Å£¡");
+            //Debug.LogWarning("Î´ï¿½ï¿½ÖµUIï¿½ï¿½ÆµÔ´ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½Å£ï¿½");
         }
     }
 
@@ -34,31 +34,31 @@ public class MenuUIController : MonoBehaviour
         if (uiAudioSource != null && buttonClickClip != null)
         {
             uiAudioSource.PlayOneShot(buttonClickClip);
-            Debug.Log("ÒôÐ§²¥·Å³É¹¦£¡");
+            //Debug.Log("ï¿½ï¿½Ð§ï¿½ï¿½ï¿½Å³É¹ï¿½ï¿½ï¿½");
         }
         else
         {
-            Debug.LogError("ÒôÐ§²¥·ÅÊ§°Ü£ºAudioSource»òAudioClipÎª¿Õ£¡");
+            //Debug.LogError("ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½AudioSourceï¿½ï¿½AudioClipÎªï¿½Õ£ï¿½");
         }
     }
 
-    // ¿ªÊ¼ÓÎÏ·£ºÑÓ³Ù¼ÓÔØ³¡¾°£¬È·±£ÒôÐ§²¥·ÅÍê
+    // ï¿½ï¿½Ê¼ï¿½ï¿½Ï·ï¿½ï¿½ï¿½Ó³Ù¼ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void OnStartGameButtonClick()
     {
-        PlayButtonClickSound(); // ÏÈ²¥·ÅÒôÐ§
-        // ÑÓ³ÙsoundDelayÃëºó¼ÓÔØ³¡¾°
+        PlayButtonClickSound(); // ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
+        // ï¿½Ó³ï¿½soundDelayï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½
         Invoke("LoadGameScene", soundDelay);
     }
 
-    // ÍË³öÓÎÏ·£ºÑÓ³ÙÍË³ö£¬È·±£ÒôÐ§²¥·ÅÍê
+    // ï¿½Ë³ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½Ó³ï¿½ï¿½Ë³ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void OnQuitGameButtonClick()
     {
-        PlayButtonClickSound(); // ÏÈ²¥·ÅÒôÐ§
-        // ÑÓ³ÙsoundDelayÃëºóÍË³ö
+        PlayButtonClickSound(); // ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½Ð§
+        // ï¿½Ó³ï¿½soundDelayï¿½ï¿½ï¿½ï¿½Ë³ï¿½
         Invoke("QuitGame", soundDelay);
     }
 
-    // ¿ª·¢ÕßÃûµ¥£ºÔ­ÓÐÂß¼­²»±ä
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô­ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½
     public void ShowDeveloperPanel()
     {
         PlayButtonClickSound();
@@ -77,24 +77,24 @@ public class MenuUIController : MonoBehaviour
         }
     }
 
-    // ·â×°³¡¾°¼ÓÔØÂß¼­£¨¹©ÑÓ³Ùµ÷ÓÃ£©
+    // ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ùµï¿½ï¿½Ã£ï¿½
     private void LoadGameScene()
     {
         try
         {
             SceneManager.LoadScene(gameSceneName);
-            Debug.Log("¿ªÊ¼ÓÎÏ·£¬¼ÓÔØ³¡¾°£º" + gameSceneName);
+            //Debug.Log("ï¿½ï¿½Ê¼ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ï¿½ï¿½" + gameSceneName);
         }
         catch (System.Exception e)
         {
-            Debug.LogError("¼ÓÔØ³¡¾°Ê§°Ü£º" + e.Message);
+            //Debug.LogError("ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½" + e.Message);
         }
     }
 
-    // ·â×°ÍË³öÂß¼­£¨¹©ÑÓ³Ùµ÷ÓÃ£©
+    // ï¿½ï¿½×°ï¿½Ë³ï¿½ï¿½ß¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ùµï¿½ï¿½Ã£ï¿½
     private void QuitGame()
     {
-        Debug.Log("ÍË³öÓÎÏ·");
+        //Debug.Log("ï¿½Ë³ï¿½ï¿½ï¿½Ï·");
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
