@@ -1321,7 +1321,7 @@ GameObject:
   - component: {fileID: 8152986702902506768}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1498,11 +1498,11 @@ MonoBehaviour:
   turnClip: {fileID: 8300000, guid: 7117da618a53a0b439c67beac99a576c, type: 3}
   dashClip: {fileID: 8300000, guid: 283874392642a29438b923b4719cbf8b, type: 3}
   jumpClip: {fileID: 8300000, guid: f9106348c9e6dc24fa350c645a73af3e, type: 3}
-  moveDistance: 2
+  moveDistance: 3
   actionDuration: 0.3
   dashSpeed: 15
-  jumpDistance: 2
-  jumpHeight: 2
+  jumpDistance: 3
+  jumpHeight: 0.5
   jumpDuration: 0.4
   obstacleLayer:
     serializedVersion: 2

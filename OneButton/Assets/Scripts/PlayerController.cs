@@ -3,6 +3,9 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("动画设置")]
+    public Animator spriteAnim;
+    
     [Header("音效设置")]
     public AudioSource actionAudio; // 播放动作的喇叭（第一个喇叭）
     public AudioClip moveClip;      // 前进音效
@@ -65,6 +68,7 @@ public class PlayerController : MonoBehaviour
         {
             // 播放冲刺音效！
             if (actionAudio != null && dashClip != null) actionAudio.PlayOneShot(dashClip);
+            if(spriteAnim) spriteAnim.SetTrigger("doDash");
             StartCoroutine(DashRoutine());
         }
     }
@@ -98,6 +102,7 @@ public class PlayerController : MonoBehaviour
             {
                 // 如果高空射线没撞到东西，说明前方要么没墙，要么只是个矮墙！可以起跳！
                 if (actionAudio != null && jumpClip != null) actionAudio.PlayOneShot(jumpClip);
+                if(spriteAnim) spriteAnim.SetTrigger("doJump");
                 StartCoroutine(JumpRoutine());
             }
         }
@@ -108,6 +113,7 @@ public class PlayerController : MonoBehaviour
     // 通用移动协程（供 Move 使用）
     private IEnumerator MoveRoutine(Vector3 targetPos)
     {
+        if(spriteAnim) spriteAnim.SetBool("isMoving", true);
         isActing = true;
         lastSafePosition = transform.position; // 行动前，记录当前位置为“安全位置”
         
@@ -125,6 +131,7 @@ public class PlayerController : MonoBehaviour
         
         // 移动结束后，检测脚底下是不是坑
         CheckGround();
+        if(spriteAnim) spriteAnim.SetBool("isMoving", false);
     }
 
     // 冲刺协程 (Dash)
