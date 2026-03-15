@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
     [Header("动画设置")]
     public Animator spriteAnim;
     
+    [Header("2D 动画引用")]
+    public SpriteRenderer spriteRenderer; 
+    
     [Header("音效设置")]
     public AudioSource actionAudio; // 播放动作的喇叭（第一个喇叭）
     public AudioClip moveClip;      // 前进音效
@@ -31,12 +34,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 lastSafePosition;  // 记录掉下坑之前的安全位置
     private Renderer playerRenderer;   // 用于控制闪烁效果
-
-    void Start()
-    {
-        // 获取玩家身上的渲染器（用来做复活闪烁）
-        playerRenderer = GetComponent<Renderer>();
-    }
 
     // --- 公开指令方法 ---
     public void MoveForward()
@@ -286,13 +283,13 @@ public class PlayerController : MonoBehaviour
         transform.position = lastSafePosition;
 
         // 4. 执行复活无敌闪烁动画 (闪烁 4 次)
-        if (playerRenderer != null)
+        if (spriteRenderer != null)
         {
             for (int i = 0; i < 4; i++)
             {
-                playerRenderer.enabled = false; // 隐身
+                spriteRenderer.enabled = false; // 纸片人隐身
                 yield return new WaitForSeconds(0.15f);
-                playerRenderer.enabled = true;  // 显形
+                spriteRenderer.enabled = true;  // 纸片人显形
                 yield return new WaitForSeconds(0.15f);
             }
         }
