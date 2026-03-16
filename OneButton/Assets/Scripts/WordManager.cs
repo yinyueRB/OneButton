@@ -9,7 +9,6 @@ public class WordManager : MonoBehaviour
     
     [Header("逻辑引用")]
     public PlayerController player;
-    public LetterCarousel carousel;
 
     private string currentWord = "";    // 当前玩家打出的字母组合
     private bool isProcessing = false;  // 是否正在处理判定（判定时不允许玩家继续打字）
@@ -93,12 +92,6 @@ public class WordManager : MonoBehaviour
             Debug.Log("<color=cyan>成功打出指令: MOVE! 执行向前移动</color>");
             player.MoveForward(); // 呼叫移动
             ClearWord(1f); // 1秒后清空填字格
-        }
-        else if (word == "TURN")
-        {
-            Debug.Log("<color=cyan>成功打出指令: TURN! 切换轮播表</color>");
-            carousel.SwitchToTurnMode(); // 呼叫轮播表切换模式
-            ClearWord(0f); // 立刻清空填字格，以便玩家专心选方向
         }
         else if (word == "DASH")
         {

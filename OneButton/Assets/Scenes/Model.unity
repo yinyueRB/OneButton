@@ -25157,7 +25157,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c97a84b28b292f64dbb2471e889fcf62, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5bdecc446c8671643a5198169d9668b1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -68759,7 +68759,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 16002809}
+  m_Mesh: {fileID: 386031487}
 --- !u!114 &2078584337
 MonoBehaviour:
   m_ObjectHideFlags: 0
